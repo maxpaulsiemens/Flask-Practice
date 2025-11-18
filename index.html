@@ -1,0 +1,98 @@
+<!doctype html>
+<html>
+<head>
+    <title>Inventory Dashboard</title>
+    <style>
+        body {
+            background-color: LightGray; 
+            color: black;
+        }
+    </style>
+</head>
+<body>
+    {% if session.get('logged_in') %}
+        <h1>Welcome, {{ session["username"] }}!</h1> 
+        <a href="/logout">Logout</a>
+        <p><a href="{{ url_for('show_image') }}"><button>View Example Image</button></a></p>
+        <p><a href="{{ url_for('view_notes') }}"><button>View/Add Notes</button></a></p>
+        <hr>
+
+        <h2>Location Data</h2>
+        <table border="1" cellpadding="10" cellspacing="0">
+            <tr>
+                <th>ID</th>
+                <th>Office</th>
+                <th>Zone</th>
+                <th>Bay</th>
+            </tr>
+            {% for loc in locations %}
+            <tr>
+                <td>{{ loc.id }}</td>
+                <td>{{ loc.office }}</td>
+                <td>{{ loc.zone }}</td>
+                <td>{{ loc.bay }}</td>
+            </tr>
+            {% endfor %}
+        </table>
+
+        <hr>
+
+        <h2>Stock Variables (with Location Info)</h2>
+        <table border="1" cellpadding="10" cellspacing="0">
+            <tr>
+                <th>ID</th>
+                <th>Serial</th>
+                <th>Mfg</th>
+                <th>Dimen</th>
+                <th>Type</th>
+                <th>Modifier</th>
+                <th>Location ID</th>
+                <th>Bay</th>
+            </tr>
+            {% for item in stock %}
+            <tr>
+                <td>{{ item.id }}</td>
+                <td>{{ item.serial }}</td>
+                <td>{{ item.mfg }}</td>
+                <td>{{ item.dimen }}</td>
+                <td>{{ item.type }}</td>
+                <td>{{ item.modifier }}</td>
+                <td>{{ item.location_id }}</td>
+                <td>{{ item.location.bay if item.location else 'N/A' }}</td> 
+            </tr>
+            {% endfor %}
+        </table>
+    
+        <hr>
+        
+        <h2>➕ Add New Stock Item</h2>
+        <form method="post" action="/add_stock">
+            <label for="serial">Serial:</label>
+            <input type="text" id="serial" name="serial" required size="5" maxlength="10">
+
+            <label for="mfg">Mfg:</label>
+            <input type="text" id="mfg" name="mfg" size="5" maxlength="10">
+
+            <label for="dimen">Dimen:</label>
+            <input type="text" id="dimen" name="dimen" size="5" maxlength="10">
+
+            <label for="type">Type:</label>
+            <input type="text" id="type" name="type" size="5" maxlength="10">
+
+            <label for="modifier">Modifier:</label>
+            <input type="text" id="modifier" name="modifier" size="5" maxlength="10">
+
+            <label for="location_id">Location:</label>
+            <select id="location_id" name="location_id" required>
+                {% for loc in locations %}
+                <option value="{{ loc.id }}">{{ loc.office }}-{{ loc.zone }}-{{ loc.bay }} (ID: {{ loc.id }})</option>
+                {% endfor %}
+            </select>
+            
+            <input type="submit" value="Add Stock">
+        </form>
+        <hr>
+    {% else %}
+        {% endif %}
+</body>
+</html>

@@ -1,0 +1,25 @@
+<!doctype html>
+<html>
+<head>
+    <title>Secure Login</title>
+    <style>
+        body {
+            background-color: LightGray; 
+            color: black;
+        }
+    </style>
+</head>
+<body>
+    <h1>Secure Login (SQLAlchemy)</h1>
+    {% if error %}<p style="color:red;">{{ error }}</p>{% endif %}
+    <form method="post" action="/login">
+        Username: <input type="text" name="username" autocomplete="off" maxlength="10"><br><br>
+        Password: <input type="password" name="password" maxlength="10"><br><br>
+        <input type="submit" value="Login">
+    </form>
+</body>
+</html>
+
+<!--
+Maxlengths for injection defense
+-->
